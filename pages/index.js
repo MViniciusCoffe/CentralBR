@@ -2,22 +2,22 @@ import Globe from '../components/Globe';
 import styles from '../styles/Home.module.css'; // se tiver CSS module
 
 export default function Home() {
-    return (
-        <div className={styles.container}>
-            <header className={styles.header}>
-                <h1>CentralBR - Mapa Eleitor 3D</h1>
-                <p>Clique nos estados para ver os candidatos</p>
-            </header>
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>CentralBR - Mapa Eleitor 3D</h1>
+        <p>Clique nos estados para ver os candidatos</p>
+      </header>
 
-            <main className={styles.main}>
-                <div className={styles.globoWrapper}>
-                    <Globe />
-                </div>
-            </main>
-
-            <footer className={styles.footer}>
-                <p>Dados públicos · Projeto de portfólio</p>
-            </footer>
+      <main className={styles.main}>
+        <div className={styles.globoWrapper}>
+          <Globe />
         </div>
-    );
+      </main>
+
+      <footer className={styles.footer}>
+        <p>Dados públicos · Projeto de portfólio</p>
+      </footer>
+    </div>
+  );
 }
