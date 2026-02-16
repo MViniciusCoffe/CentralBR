@@ -1,0 +1,50 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #111;
+  color: white;
+}
+
+.header {
+  background-color: #2c3e50;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 4px solid #3498db;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header p {
+  margin: 10px 0 0;
+  opacity: 0.8;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.globoWrapper {
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  background-color: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #3498db;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+}
+
+.footer {
+  background-color: #34495e;
+  padding: 15px;
+  text-align: center;
+  margin-top: auto;
+}
