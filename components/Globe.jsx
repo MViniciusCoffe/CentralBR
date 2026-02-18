@@ -59,92 +59,74 @@ export default function Globe() {
       fetch('/data/brazil-states.json').then(res => res.json()) // ajuste o caminho se necessário
     ])
       .then(([worldData, brazilData]) => {
-      // 3. Marcar as features do Brasil com uma propriedade especial
-      const brazilFeatures = brazilData.features.map(feat => ({
-        ...feat,
-        properties: {
-          ...feat.properties,
-          isBrazilState: true // identificador para estilização
-        }
-      }));
+        // 3. Marcar as features do Brasil com uma propriedade especial
+        const brazilFeatures = brazilData.features.map(feat => ({
+          ...feat,
+          properties: {
+            ...feat.properties,
+            isBrazilState: true // identificador para estilização
+          }
+        }));
 
-      const combinedFeatures = [...worldData.features, ...brazilFeatures];
-      const combinedData = {
-        type: 'FeatureCollection',
-        features: combinedFeatures
-      };
+        const combinedFeatures = [...worldData.features, ...brazilFeatures];
+        const combinedData = {
+          type: 'FeatureCollection',
+          features: combinedFeatures
+        };
 
-      const globe = new ThreeGlobe()
-        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg') // textura da Terra
-        .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')    // relevo (opcional)
-        // Se for estado brasileiro, verde semi-transparente; senão, cinza claro
-        .showAtmosphere(true)
-        .atmosphereColor('lightskyblue')
-        .polygonsData(combinedData.features)
-        .polygonCapColor(feat => {
-          return feat.properties.isBrazilState
-            ? 'rgba(0, 200, 100, 0.3)'  // verde para o Brasil
-            : 'rgba(150, 150, 150, 0.1)'; // cinza quase transparente para outros países
-        })
+        const globe = new ThreeGlobe()
+          .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg') // textura da Terra
+          .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')    // relevo (opcional)
+          // Se for estado brasileiro, verde semi-transparente; senão, cinza claro
+          .showAtmosphere(true)
+          .atmosphereColor('lightskyblue')
+          .polygonsData(combinedData.features)
+          .polygonCapColor(feat => {
+            return feat.properties.isBrazilState
+              ? 'rgba(0, 200, 100, 0.3)'  // verde para o Brasil
+              : 'rgba(150, 150, 150, 0.1)'; // cinza quase transparente para outros países
+          })
 
-        .polygonSideColor(() => 'rgba(100, 100, 100, 0.05)')
-        .polygonStrokeColor(feat => {
-          // Bordas: branca para o Brasil, cinza para o resto
-          return feat.properties.isBrazilState
-            ? '#ffffff'  // borda branca para destacar
-            : '#555555'; // borda escura para outros
-        })
-        .polygonAltitude(0.01); // pequena elevação para evitar artefatos
+          .polygonSideColor(() => 'rgba(100, 100, 100, 0.05)')
+          .polygonStrokeColor(feat => {
+            // Bordas: branca para o Brasil, cinza para o resto
+            return feat.properties.isBrazilState
+              ? '#ffffff'  // borda branca para destacar
+              : '#555555'; // borda escura para outros
+          })
+          .polygonAltitude(0.01); // pequena elevação para evitar artefatos
 
-      scene.add(globe);
-    })
-    .catch(err => console.error('Erro ao carregar dados:', err));
+        scene.add(globe);
+      })
+      .catch(err => console.error('Erro ao carregar dados:', err));
 
-  // Ajuste de tamanho quando a janela for redimensionada
-  const handleResize = () => {
-    const width = mountRef.current.clientWidth;
-    const height = mountRef.current.clientHeight;
-    renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  };
-  window.addEventListener('resize', handleResize);
+    // Ajuste de tamanho quando a janela for redimensionada
+    const handleResize = () => {
+      const width = mountRef.current.clientWidth;
+      const height = mountRef.current.clientHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', handleResize);
 
-  // Loop de animação
-  const animate = () => {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  };
-  animate();
+    // Loop de animação
+    const animate = () => {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
 
-  // Limpeza ao desmontar
-  return () => {
-    window.removeEventListener('resize', handleResize);
-    if (mountRef.current) {
-      mountRef.current.removeChild(renderer.domElement);
-    }
-    renderer.dispose();
-  };
-}, []);
+    // Limpeza ao desmontar
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (mountRef.current) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, []);
 
-return <div ref={mountRef} style={{ width: '100%', height: '600px' }} />;
-}
-
-function desenharPoligono(coordenadas, key, raio) {
-  const anelExterior = coordenadas[0];
-  const pontos = anelExterior.map(coord => {
-    const [lon, lat] = coord;
-    return latLonToPosition(lat, lon, raio);
-  });
-  pontos.push(pontos[0]); // Fecha o polígono
-
-  return (
-    <Line
-      key={key}
-      points={pontos}
-      color="#ffffff"
-      lineWidth={1}
-    />
-  );
+  return <div ref={mountRef} style={{ width: '100%', height: '600px' }} />;
 }

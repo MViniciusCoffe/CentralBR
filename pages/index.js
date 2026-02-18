@@ -11,8 +11,8 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>CentralBR - Mapa Eleitor 3D</h1>
-        <p>Clique nos estados para ver os candidatos</p>
+        <h1>CentralBR</h1>
+        <p>Clique nos estados para ver as estatísticas</p>
       </header>
 
       <main className={styles.main}>
