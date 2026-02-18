@@ -1,5 +1,11 @@
-import Globe from '../components/Globe';
+// import Globe from '../components/Globe';
+import dynamic from 'next/dynamic';
 import styles from '../styles/Home.module.css'; // se tiver CSS module
+
+const Globe = dynamic(() => import('../components/Globe'), {
+  ssr: false,
+  loading: () => <div>Carregando mapa...</div>
+});
 
 export default function Home() {
   return (

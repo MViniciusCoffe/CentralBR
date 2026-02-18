@@ -1,8 +1,9 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Sphere, Line } from '@react-three/drei'
-import { useRef } from 'react'
-import { useEffect, useState } from 'react'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { Sphere, Line } from '@react-three/drei'
+import { useEffect, useState, useRef } from 'react'
 import * as THREE from 'three';
+import ThreeGlobe from 'three-globe';
 
 // Função para converter coordenadas geográficas (lon, lat) para posição 3D
 function latLonToPosition(lat, lon, radius) {
@@ -16,67 +17,118 @@ function latLonToPosition(lat, lon, radius) {
 }
 
 export default function Globe() {
-  const [estados, setEstados] = useState([]);
-  const [carregando, setCarregando] = useState(true);
+  const mountRef = useRef(null);
 
   useEffect(() => {
-    fetch('/data/brazil-states.json')
-      .then(res => res.json())
-      .then(data => {
-        setEstados(data.features);
-        setCarregando(false);
-      })
-      .catch(err => console.error('Erro ao carregar GeoJSON:', err));
-  }, []);
+    // Configuração da cena
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050510);
 
-  if (carregando) {
-    return <div style={{ color: 'white', textAlign: 'center' }}>Carregando mapa...</div>;
-  }
+    // Câmera
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      mountRef.current.clientWidth / mountRef.current.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(-1000, -300, 750);
 
-  const raio = 5; // Raio do globo
+    // Renderizador
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    mountRef.current.appendChild(renderer.domElement);
 
-  return (
-    <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
-      {/* Iluminação */}
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
+    // Iluminação
+    const ambientLight = new THREE.AmbientLight(0xbbbbbb);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(1, 1, 1);
+    scene.add(dirLight);
 
-      {/* Esfera base */}
-      <Sphere args={[raio, 64, 64]}>
-        <meshStandardMaterial color="#1a5f9e" wireframe={false} transparent opacity={0.2} />
-      </Sphere>
+    // Controles de órbita
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.rotateSpeed = 0.5;
+    controls.minDistance = 100;
+    controls.maxDistance = 300;
 
-      {/* Desenha as fronteiras */}
-      {estados.map((estado, index) => {
-        const geometria = estado.geometry;
-        if (geometria.type === 'Polygon') {
-          return desenharPoligono(geometria.coordinates, index, raio);
-        } else if (geometria.type === 'MultiPolygon') {
-          return geometria.coordinates.map((poly, i) =>
-            desenharPoligono(poly, `${index}-${i}`, raio)
-          );
+    Promise.all([
+      fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson').then(res => res.json()),
+      fetch('/data/brazil-states.json').then(res => res.json()) // ajuste o caminho se necessário
+    ])
+      .then(([worldData, brazilData]) => {
+      // 3. Marcar as features do Brasil com uma propriedade especial
+      const brazilFeatures = brazilData.features.map(feat => ({
+        ...feat,
+        properties: {
+          ...feat.properties,
+          isBrazilState: true // identificador para estilização
         }
-        return null;
-      })}
+      }));
 
-      <OrbitControls enableZoom={true} enablePan={false} rotateSpeed={0.5} />
+      const combinedFeatures = [...worldData.features, ...brazilFeatures];
+      const combinedData = {
+        type: 'FeatureCollection',
+        features: combinedFeatures
+      };
 
-      {/* Polo Norte (vermelho) */}
-      <Sphere args={[0.2, 16, 16]} position={latLonToPosition(90, 0, raio)}>
-        <meshStandardMaterial color="red" />
-      </Sphere>
+      const globe = new ThreeGlobe()
+        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg') // textura da Terra
+        .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')    // relevo (opcional)
+        // Se for estado brasileiro, verde semi-transparente; senão, cinza claro
+        .showAtmosphere(true)
+        .atmosphereColor('lightskyblue')
+        .polygonsData(combinedData.features)
+        .polygonCapColor(feat => {
+          return feat.properties.isBrazilState
+            ? 'rgba(0, 200, 100, 0.3)'  // verde para o Brasil
+            : 'rgba(150, 150, 150, 0.1)'; // cinza quase transparente para outros países
+        })
 
-      {/* Polo Sul (azul) */}
-      <Sphere args={[0.2, 16, 16]} position={latLonToPosition(-90, 0, raio)}>
-        <meshStandardMaterial color="blue" />
-      </Sphere>
+        .polygonSideColor(() => 'rgba(100, 100, 100, 0.05)')
+        .polygonStrokeColor(feat => {
+          // Bordas: branca para o Brasil, cinza para o resto
+          return feat.properties.isBrazilState
+            ? '#ffffff'  // borda branca para destacar
+            : '#555555'; // borda escura para outros
+        })
+        .polygonAltitude(0.01); // pequena elevação para evitar artefatos
 
-      {/* Brasília (verde) – para referência */}
-      <Sphere args={[0.2, 16, 16]} position={latLonToPosition(-15.8, -47.9, raio)}>
-        <meshStandardMaterial color="green" />
-      </Sphere>
-    </Canvas>
-  );
+      scene.add(globe);
+    })
+    .catch(err => console.error('Erro ao carregar dados:', err));
+
+  // Ajuste de tamanho quando a janela for redimensionada
+  const handleResize = () => {
+    const width = mountRef.current.clientWidth;
+    const height = mountRef.current.clientHeight;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  };
+  window.addEventListener('resize', handleResize);
+
+  // Loop de animação
+  const animate = () => {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  };
+  animate();
+
+  // Limpeza ao desmontar
+  return () => {
+    window.removeEventListener('resize', handleResize);
+    if (mountRef.current) {
+      mountRef.current.removeChild(renderer.domElement);
+    }
+    renderer.dispose();
+  };
+}, []);
+
+return <div ref={mountRef} style={{ width: '100%', height: '600px' }} />;
 }
 
 function desenharPoligono(coordenadas, key, raio) {
