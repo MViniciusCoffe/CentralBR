@@ -1,20 +1,7 @@
-import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { Sphere, Line } from '@react-three/drei'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import * as THREE from 'three';
 import ThreeGlobe from 'three-globe';
-
-// Função para converter coordenadas geográficas (lon, lat) para posição 3D
-function latLonToPosition(lat, lon, radius) {
-  const phi = (90 - lat) * Math.PI / 180;
-  const theta = lon * Math.PI / 180;
-  return new THREE.Vector3(
-    -radius * Math.sin(phi) * Math.cos(theta),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta)
-  );
-}
 
 export default function Globe() {
   const mountRef = useRef(null);
@@ -51,7 +38,7 @@ export default function Globe() {
     controls.enableZoom = true;
     controls.enablePan = false;
     controls.rotateSpeed = 0.5;
-    controls.minDistance = 100;
+    controls.minDistance = 110;
     controls.maxDistance = 300;
 
     Promise.all([
@@ -128,5 +115,5 @@ export default function Globe() {
     };
   }, []);
 
-  return <div ref={mountRef} style={{ width: '100%', height: '600px' }} />;
+  return <div ref={mountRef} style={{ width: '100%', height: '100%' }} />;
 }
