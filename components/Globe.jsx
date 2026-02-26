@@ -1,6 +1,6 @@
 import Globe from 'react-globe.gl';
 import { useEffect, useRef, useState } from 'react';
-import { geoCentroid } from 'd3-geo';
+import { geoCentroid, geoArea } from 'd3-geo';
 
 export default function MyGlobe({ data }) {
   const globeRef = useRef();
@@ -105,15 +105,17 @@ export default function MyGlobe({ data }) {
       onPolygonClick={d => {
         if (!d) return;
 
-        const [ lng, lat ] = geoCentroid(d);
+        const [lng, lat] = geoCentroid(d);
+        const area = geoArea(d);
+
+        const altitude = d.properties.isBrazilState
+          ? 0.1 + Math.sqrt(area) * 2
+          : 1.2 + Math.sqrt(area) * 2;
 
         globeRef.current.controls().autoRotate = false
-
         globeRef.current.pointOfView(
           {
-            lat,
-            lng,
-            altitude: d.properties.isBrazilState ? 0.1 : 1.5
+            lat, lng, altitude
           },
           1500
         );
