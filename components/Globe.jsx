@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 export default function MyGlobe({ data }) {
   const globeRef = useRef();
 
-  const [hovered, setHovered] = useState([]);
+  const [hovered, setHovered] = useState(null);
   const [polygons, setPolygons] = useState([]);
 
   useEffect(() => {
@@ -26,8 +26,12 @@ export default function MyGlobe({ data }) {
           }
         }))
 
+        const worldWithoutBrazil = worldData.features.filter(
+          feat => feat.properties.name !== 'Brazil'
+        );
+
         const combined = [
-          ...worldData.features,
+          ...worldWithoutBrazil,
           ...brazilFeatures
         ]
 
@@ -52,15 +56,23 @@ export default function MyGlobe({ data }) {
   return (
     <Globe
       ref={globeRef}
+      autoRotate={true}
+      autoRotateSpeed={0.5}
+      polygonsData={polygons}
+      polygonsTransitionDuration={200}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-      polygonsData={polygons}
 
       polygonCapColor={d => {
-        if (d === hovered) return 'rgba(255,255,0,0.7)';
-        return d.properties.isBrazilState
-          ? 'rgba(0,200,100,0.35)'
-          : 'rgba(150,150,150,0.1)';
+        if (d === hovered && d.properties.isBrazilState) {
+          return 'rgba(255,215,0,0.9)'
+        }
+
+        if (d.properties.isBrazilState) {
+          return 'rgba(255,215,0,0.4)'
+        }
+
+        return 'rgba(0,0,0,0)'
       }}
 
       polygonSideColor={() => 'rgba(0,0,0,0.05)'}
@@ -73,9 +85,19 @@ export default function MyGlobe({ data }) {
         d.properties.isBrazilState ? 1.2 : 0.3
       }
 
-      polygonAltitude={d =>
-        d === hovered ? 0.02 : 0.01
-      }
+      polygonAltitude={d => {
+        if (!hovered) return 0.01
+
+        if (d === hovered && d.properties.isBrazilState) {
+          return 0.03
+        }
+
+        if (d === hovered) {
+          return 0.02
+        }
+
+        return 0.01
+      }}
 
       onPolygonHover={setHovered}
 
