@@ -2,10 +2,10 @@ import Globe from 'react-globe.gl';
 import { useEffect, useRef, useState } from 'react';
 
 export default function MyGlobe({ data }) {
-  const globoRef = useRef();
+  const globeRef = useRef();
 
   const [hovered, setHovered] = useState([]);
-  const [polygons, setPolygons] = useState(null);
+  const [polygons, setPolygons] = useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -40,15 +40,23 @@ export default function MyGlobe({ data }) {
     loadData();
   }, []);
 
+  useEffect(() => {
+    if (globeRef.current) {
+      globeRef.current.pointOfView(
+        { lat: -10, lng: -55, altitude: 2 },
+        2000
+      );
+    }
+  }, [polygons]);
+
   return (
     <Globe
-      ref={globoRef}
+      ref={globeRef}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
       polygonsData={polygons}
 
       polygonCapColor={d => {
-        // cores de teste
         if (d === hovered) return 'rgba(255,255,0,0.7)';
         return d.properties.isBrazilState
           ? 'rgba(0,200,100,0.35)'
@@ -57,7 +65,7 @@ export default function MyGlobe({ data }) {
 
       polygonSideColor={() => 'rgba(0,0,0,0.05)'}
 
-      polygonStrokeColor={d => 
+      polygonStrokeColor={d =>
         d.properties.isBrazilState ? '#ffffff' : '#555555'
       }
 
@@ -66,7 +74,7 @@ export default function MyGlobe({ data }) {
       }
 
       polygonAltitude={d =>
-        d === hovered ? 0.05 : 0.01
+        d === hovered ? 0.02 : 0.01
       }
 
       onPolygonHover={setHovered}
