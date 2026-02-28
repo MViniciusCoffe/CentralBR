@@ -2,7 +2,7 @@ import Globe from 'react-globe.gl';
 import { useEffect, useRef, useState } from 'react';
 import { geoCentroid, geoArea } from 'd3-geo';
 
-export default function MyGlobe({ data }) {
+export default function MyGlobe({ onCoordsChange }) {
   const globeRef = useRef();
 
   const [hovered, setHovered] = useState(null);
@@ -54,6 +54,40 @@ export default function MyGlobe({ data }) {
     }
   }, [polygons]);
 
+  useEffect(() => {
+    if (!globeRef.current || typeof onCoordsChange !== 'function') return;
+    
+    const renderer = globeRef.current.renderer();
+    if (!renderer) return;
+    const canvas = globeRef.current.renderer().domElement;
+
+    const handleMouseMove = (event) => {
+      const rect = canvas.getBoundingClientRect();
+
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const coords = globeRef.current.getCoords(x, y);
+
+      if (!coords) {
+        onCoordsChange(null);
+        return
+      };
+
+      onCoordsChange({
+        lat: coords.y,
+        lng: coords.x
+      });
+    };
+
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [onCoordsChange]);
+
   return (
     <Globe
       ref={globeRef}
@@ -63,6 +97,7 @@ export default function MyGlobe({ data }) {
       polygonsTransitionDuration={200}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+      onPolygonHover={setHovered}
 
       polygonCapColor={d => {
         if (d === hovered && d.properties.isBrazilState) {
@@ -100,8 +135,6 @@ export default function MyGlobe({ data }) {
         return 0.01
       }}
 
-      onPolygonHover={setHovered}
-
       onPolygonClick={d => {
         if (!d) return;
 
@@ -120,7 +153,7 @@ export default function MyGlobe({ data }) {
           1500
         );
 
-        if (!lat, !lng) return;
+        if (!lat || !lng) return;
       }}
     />
   );
