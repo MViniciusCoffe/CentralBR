@@ -93,6 +93,7 @@ export default function MyGlobe({ onCoordsChange }) {
       ref={globeRef}
       autoRotate={true}
       autoRotateSpeed={0.5}
+      polygonsData={polygons}
       polygonsTransitionDuration={200}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
