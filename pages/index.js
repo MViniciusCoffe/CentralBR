@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 const Globe = dynamic(() => import('../components/Globe'), {
   ssr: false,
-  loading: () => <div className={styles.homeLoading}>Carregando mapa...</div>
+  loading: () => <div className={styles.mainLoader}>Carregando mapa...</div>
 });
 
 export default function Home() {

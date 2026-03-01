@@ -56,7 +56,7 @@ export default function MyGlobe({ onCoordsChange }) {
 
   useEffect(() => {
     if (!globeRef.current || typeof onCoordsChange !== 'function') return;
-    
+
     const renderer = globeRef.current.renderer();
     if (!renderer) return;
     const canvas = globeRef.current.renderer().domElement;
