@@ -47,6 +47,24 @@
   box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
 }
 
+.windRose {
+  position: absolute;
+  background-color: transparent;
+  top: 3%;
+  right: 2%;
+}
+
+.windRose img {
+  width: 10rem;
+  height: 10rem;
+  filter: brightness(1000%);
+  pointer-events: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  outline: none;
+}
+
 .footer {
   position: absolute;
   bottom: 0%;

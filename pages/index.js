@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import styles from '../styles/Home.module.css';
-import { useState } from 'react'
+import { useState } from 'react';
+import Image from 'next/image'
 
 const Globe = dynamic(() => import('../components/Globe'), {
   ssr: false,
@@ -36,6 +37,16 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.globoWrapper}>
           <Globe onCoordsChange={setCoords} />
+        </div>
+        <div className={styles.windRose}>
+          <Image
+            src="/img/wind-rose.png"
+            alt="Wind Rose"
+            width={120}
+            height={120}
+            priority
+            draggable="false"
+          />
         </div>
       </main>
 
