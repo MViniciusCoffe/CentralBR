@@ -1,11 +1,11 @@
-import dynamic from 'next/dynamic';
-import styles from '../styles/Home.module.css';
-import { useState } from 'react';
-import Image from 'next/image'
+import dynamic from "next/dynamic";
+import styles from "../styles/Home.module.css";
+import { useState } from "react";
+import Image from "next/image";
 
-const Globe = dynamic(() => import('../components/Globe'), {
+const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
-  loading: () => <div className={styles.mainLoader}>Carregando mapa...</div>
+  loading: () => <div className={styles.mainLoader}>Carregando mapa...</div>,
 });
 
 export default function Home() {
@@ -14,17 +14,15 @@ export default function Home() {
   function formatCoordToDegree(value, isLat) {
     const abs = Math.abs(value);
 
-    const degrees = Math.floor(abs)
-    const minutesFloat = (abs - degrees) * 60
+    const degrees = Math.floor(abs);
+    const minutesFloat = (abs - degrees) * 60;
     const minutes = Math.floor(minutesFloat);
 
-    const seconds = Math.floor((minutesFloat - minutes) * 60)
+    const seconds = Math.floor((minutesFloat - minutes) * 60);
 
-    const direction = isLat
-      ? value >= 0 ? 'N' : 'S'
-      : value >= 0 ? 'E' : 'W'
+    const direction = isLat ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
 
-    return `${degrees}° ${minutes}' ${seconds}" ${direction}`
+    return `${degrees}° ${minutes}' ${seconds}" ${direction}`;
   }
 
   return (
@@ -55,7 +53,7 @@ export default function Home() {
         <div>
           {coords
             ? `${formatCoordToDegree(coords.lat, true)} | ${formatCoordToDegree(coords.lng, false)}`
-            : 'Passe o mouse sobre o globo'}
+            : "Passe o mouse sobre o globo"}
         </div>
       </footer>
     </div>
