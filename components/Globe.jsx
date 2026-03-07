@@ -1,10 +1,11 @@
 import Globe from "react-globe.gl";
 import { useEffect, useRef, useState } from "react";
 import { geoCentroid, geoArea } from "d3-geo";
+import * as THREE from "three";
 
 export default function MyGlobe({ onCoordsChange }) {
   const globeRef = useRef();
-
+  const [isOverGlobe, setIsOverGlobe] = useState(false);
   const [hovered, setHovered] = useState(null);
   const [polygons, setPolygons] = useState([]);
 
@@ -55,17 +56,39 @@ export default function MyGlobe({ onCoordsChange }) {
 
     const renderer = globeRef.current.renderer();
     if (!renderer) return;
-    const canvas = globeRef.current.renderer().domElement;
+
+    const canvas = renderer.domElement;
+    const camera = globeRef.current.camera();
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const globeSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 100);
+
+    const intersectionPoint = new THREE.Vector3();
 
     const handleMouseMove = (event) => {
       const rect = canvas.getBoundingClientRect();
 
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      const coords = globeRef.current.getCoords(x, y);
+      raycaster.setFromCamera(mouse, camera);
+      const hit = raycaster.ray.intersectSphere(globeSphere, intersectionPoint);
 
-      if (!coords) {
+      if (!hit) {
+        setIsOverGlobe(false);
+        onCoordsChange(null);
+        return;
+      }
+
+      setIsOverGlobe(true);
+
+      const coords = globeRef.current.getCoords(
+        event.clientX - rect.left,
+        event.clientY - rect.top,
+      );
+
+      if (!coords || isNaN(coords.x) || isNaN(coords.y)) {
         onCoordsChange(null);
         return;
       }
@@ -76,10 +99,17 @@ export default function MyGlobe({ onCoordsChange }) {
       });
     };
 
+    const handleMouseLeave = () => {
+      setIsOverGlobe(false);
+      onCoordsChange(null);
+    };
+
     canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [onCoordsChange]);
 
