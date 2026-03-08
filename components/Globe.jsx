@@ -83,20 +83,12 @@ export default function MyGlobe({ onCoordsChange }) {
 
       setIsOverGlobe(true);
 
-      const coords = globeRef.current.getCoords(
-        event.clientX - rect.left,
-        event.clientY - rect.top,
-      );
+      const radius = globeSphere.radius;
+      const lat = Math.asin(intersectionPoint.y / radius) * (180 / Math.PI);
+      const lng =
+        Math.atan2(intersectionPoint.x, intersectionPoint.z) * (180 / Math.PI);
 
-      if (!coords || isNaN(coords.x) || isNaN(coords.y)) {
-        onCoordsChange(null);
-        return;
-      }
-
-      onCoordsChange({
-        lat: coords.y,
-        lng: coords.x,
-      });
+      onCoordsChange({ lat, lng });
     };
 
     const handleMouseLeave = () => {
