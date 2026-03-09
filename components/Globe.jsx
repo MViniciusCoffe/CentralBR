@@ -2,6 +2,7 @@ import Globe from "react-globe.gl";
 import { useEffect, useRef, useState } from "react";
 import { geoCentroid, geoArea } from "d3-geo";
 import * as THREE from "three";
+import { feature } from "topojson-client";
 
 export default function MyGlobe({ onCoordsChange }) {
   const globeRef = useRef();
@@ -16,13 +17,25 @@ export default function MyGlobe({ onCoordsChange }) {
           fetch(
             "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
           ),
-          fetch("/data/brazil-states.json"),
+          fetch("/data/brazil_states.json"),
         ]);
 
         const worldData = await worldRes.json();
         const brazilData = await brazilRes.json();
 
-        const brazilFeatures = brazilData.features.map((feat) => ({
+        let brazilFeatures;
+
+        if (brazilData.type === "Topology") {
+          const brazilGeo = feature(
+            brazilData,
+            brazilData.objects[Object.keys(brazilData.objects)[0]],
+          );
+          brazilFeatures = brazilGeo.features;
+        } else {
+          brazilFeatures = brazilData.features;
+        }
+
+        brazilFeatures = brazilFeatures.map((feat) => ({
           ...feat,
           properties: {
             ...feat.properties,
