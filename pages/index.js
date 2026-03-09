@@ -27,11 +27,6 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <h1>CentralBR</h1>
-        <p>Clique nos estados para ver as estatísticas</p>
-      </header>
-
       <main className={styles.main}>
         <div className={styles.globoWrapper}>
           <Globe onCoordsChange={setCoords} />
@@ -50,10 +45,20 @@ export default function Home() {
 
       <footer className={styles.footer}>
         <p>Dados públicos · Projeto de portfólio</p>
-        <div>
+        <p>
           {coords
             ? `${formatCoordToDegree(coords.lat, true)} | ${formatCoordToDegree(coords.lng, false)}`
             : "Passe o mouse sobre o globo"}
+        </p>
+        <div className={styles.configIcon}>
+            <Image
+              src="/img/config-icon.png"
+              alt="Configurações"
+              width={50}
+              height={50}
+              priority
+              draggable="false"
+            />
         </div>
       </footer>
     </div>
