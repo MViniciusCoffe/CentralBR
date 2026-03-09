@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import Image from "next/image";
+import SettingsPanel from "../components/SettingsPanel";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
@@ -9,6 +10,7 @@ const Globe = dynamic(() => import("../components/Globe"), {
 });
 
 export default function Home() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [coords, setCoords] = useState(null);
 
   function formatCoordToDegree(value, isLat) {
@@ -51,16 +53,22 @@ export default function Home() {
             : "Passe o mouse sobre o globo"}
         </p>
         <div className={styles.configIcon}>
-            <Image
-              src="/img/config-icon.png"
-              alt="Configurações"
-              width={50}
-              height={50}
-              priority
-              draggable="false"
-            />
+          <Image
+            src="/img/config-icon.png"
+            alt="Configurações"
+            width={50}
+            height={50}
+            priority
+            draggable="false"
+            onClick={() => setSettingsOpen(!settingsOpen)}
+          />
         </div>
       </footer>
+
+      <SettingsPanel 
+        open={settingsOpen}
+        setOpen={setSettingsOpen}
+      />
     </div>
   );
 }
