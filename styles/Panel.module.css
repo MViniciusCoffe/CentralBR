@@ -12,7 +12,7 @@
 }
 
 .open {
-  top: 50%;
+  top: 37%;
 }
 
 .topMenu {
@@ -78,7 +78,7 @@
   border: 1px solid #333366;
   border-radius: 0.5rem;
   box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
-  height: 50vh;
+  height: 70vh;
   background-color: #000011e0;
 }
 
