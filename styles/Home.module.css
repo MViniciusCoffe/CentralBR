@@ -37,20 +37,15 @@
   background-color: transparent;
   top: 3%;
   right: 2%;
-  filter: drop-shadow(0 0 1rem black) opacity(80%);
+  filter: drop-shadow(0 0 1rem black) opacity(100%);
   transition: all 1s ease-in-out;
-}
-
-.windRose:hover {
-  filter: drop-shadow(0 0 0.5rem rgba(255, 255, 255, 0.3)) opacity(100%);
-  cursor: default;
+  pointer-events: none;
 }
 
 .windRose img {
   width: 10rem;
   height: 10rem;
   filter: brightness(1000%);
-  pointer-events: none;
   user-drag: none;
   -webkit-user-drag: none;
   user-select: none;
@@ -64,10 +59,11 @@
   margin-top: auto;
   width: 100%;
   filter: drop-shadow(0 0 1rem black);
+  pointer-events: none;
 }
 
 .footer p {
-  font-size: 1rem;
+  font-size: 0.75rem;
   margin-top: 0.25rem;
 }
 
@@ -76,7 +72,8 @@
   filter: brightness(1000%) opacity(50%);
   right: 0.5%;
   bottom: 10%;
-  transition: 0.5s ease-in-out
+  transition: 0.5s ease-in-out;
+  pointer-events: auto;
 }
 
 .configIcon:hover {
