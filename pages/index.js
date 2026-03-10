@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import Image from "next/image";
-import SettingsPanel from "../components/SettingsPanel";
+import SettingsPanel from "../components/SettingsPanel/SettingsPanel";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,

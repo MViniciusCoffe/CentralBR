@@ -35,8 +35,8 @@
 .windRose {
   position: absolute;
   background-color: transparent;
-  top: 3%;
-  right: 2%;
+  top: 1%;
+  right: 1%;
   filter: drop-shadow(0 0 1rem black) opacity(100%);
   transition: all 1s ease-in-out;
   pointer-events: none;
