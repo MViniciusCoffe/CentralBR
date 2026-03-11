@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styles from "./Sections.module.css";
 
-import ProjectTab from "./tabs/ProjectTab";
-import AuthorTab from "./tabs/AuthorTab";
-import ControlsTab from "./tabs/ControlsTab";
-import SourcesTab from "./tabs/SourcesTab";
+import ProjectTab from "./aboutTabs/ProjectTab";
+import AuthorTab from "./aboutTabs/AuthorTab";
+import ControlsTab from "./aboutTabs/ControlsTab";
+import SourcesTab from "./aboutTabs/SourcesTab";
 
 export default function AboutSection() {
   const [tab, setTab] = useState("project");
@@ -24,9 +24,6 @@ export default function AboutSection() {
           </li>
           <li onClick={() => setTab("sources")}>
             <p>Fontes</p>
-          </li>
-          <li onClick={() => setOpen(false)}>
-            <p>Sair do Menu</p>
           </li>
         </ul>
       </div>

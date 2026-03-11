@@ -28,16 +28,6 @@
   filter: drop-shadow(0 0 0.5rem rgba(255, 255, 255, 0.3));
 }
 
-.lateralMenu li:last-child {
-  color: red;
-}
-
-.lateralMenu li:last-child:hover {
-  color: white;
-  background-color: rgba(255, 0, 0, 0.5);
-  filter: drop-shadow(0 0 0.5rem rgba(255, 0, 0, 0.5));
-}
-
 .menuContent {
   padding: 1rem;
   overflow-y: auto;
