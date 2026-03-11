@@ -2,13 +2,10 @@ import styles from "./Panel.module.css";
 import Image from "next/image";
 import { useState } from "react";
 
-import ProjectTab from "./tabs/ProjectTab";
-import AuthorTab from "./tabs/AuthorTab";
-import ControlsTab from "./tabs/ControlsTab";
-import SourcesTab from "./tabs/SourcesTab";
+import AboutSection from "./sections/AboutSection";
 
 export default function SettingsPanel({ open, setOpen }) {
-  const [tab, setTab] = useState("project");
+  const [section, setSection] = useState("about")
 
   return (
     <div className={`${styles.panel} ${open ? styles.open : ""}`}>
@@ -25,34 +22,21 @@ export default function SettingsPanel({ open, setOpen }) {
             />
             <p>Sobre</p>
           </li>
+          <li className={`${styles.menuIcon}`}>
+            <Image
+              src="/img/eye-icon.png"
+              alt="Vista"
+              width={30}
+              height={30}
+              draggable="false"
+              className={styles.icon}
+            />
+            <p>Vista</p>
+          </li>
         </ul>
       </div>
       <div className={styles.bottomMenu}>
-        <div className={styles.lateralMenu}>
-          <ul>
-            <li onClick={() => setTab("project")}>
-              <p>Projeto</p>
-            </li>
-            <li onClick={() => setTab("author")}>
-              <p>Autor</p>
-            </li>            
-            <li onClick={() => setTab("controls")}>
-              <p>Controles</p>
-            </li>            
-            <li onClick={() => setTab("sources")}>
-              <p>Fontes</p>
-            </li>
-            <li onClick={() => setOpen(false)}>
-              <p>Sair do Menu</p>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.menuContent}>
-          {tab === "project" && <ProjectTab />}
-          {tab === "author" && <AuthorTab />}
-          {tab === "controls" && <ControlsTab />}
-          {tab === "sources" && <SourcesTab />}
-        </div>
+        {section === "about" && <AboutSection />}
       </div>
     </div>
   );
