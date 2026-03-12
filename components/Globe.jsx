@@ -29,7 +29,7 @@ export default function MyGlobe({ onCoordsChange }) {
       try {
         const [worldRes, brazilRes] = await Promise.all([
           fetch(
-            "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
+            "/data/world.json",
           ),
           fetch(path),
         ]);
@@ -196,3 +196,6 @@ export default function MyGlobe({ onCoordsChange }) {
     />
   );
 }
+
+// Refazer useEffect do MapLevel
+// Fazer com que o globo recarregue após mudança, para que não trave tudo
