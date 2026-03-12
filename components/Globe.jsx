@@ -3,12 +3,26 @@ import { useEffect, useRef, useState } from "react";
 import { geoCentroid, geoArea } from "d3-geo";
 import * as THREE from "three";
 import { feature } from "topojson-client";
+import { useMap } from "../context/MapContext";
 
 export default function MyGlobe({ onCoordsChange }) {
+  const { mapLevel } = useMap();
   const globeRef = useRef();
   const [isOverGlobe, setIsOverGlobe] = useState(false);
   const [hovered, setHovered] = useState(null);
   const [polygons, setPolygons] = useState([]);
+  const [path, setPath] = useState("/data/brazil_states.json");
+
+  useEffect(() => {
+    if (mapLevel === "regions") {
+      setPath("/data/brazil_regions.json");
+    }
+
+    if (mapLevel === "states") {
+      setPath("/data/brazil_states.json");
+    }
+
+  }, [mapLevel]);
 
   useEffect(() => {
     async function loadData() {
@@ -17,7 +31,7 @@ export default function MyGlobe({ onCoordsChange }) {
           fetch(
             "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson",
           ),
-          fetch("/data/brazil_states.json"),
+          fetch(path),
         ]);
 
         const worldData = await worldRes.json();
@@ -56,7 +70,7 @@ export default function MyGlobe({ onCoordsChange }) {
     }
 
     loadData();
-  }, []);
+  }, [path]);
 
   useEffect(() => {
     if (globeRef.current) {
