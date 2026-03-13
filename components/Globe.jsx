@@ -8,34 +8,27 @@ import { useMap } from "../context/MapContext";
 export default function MyGlobe({ onCoordsChange }) {
   const { mapLevel } = useMap();
   const globeRef = useRef();
-  const [isOverGlobe, setIsOverGlobe] = useState(false);
   const [hovered, setHovered] = useState(null);
   const [polygons, setPolygons] = useState([]);
-  const [path, setPath] = useState("/data/brazil_states.json");
+  const worldDataRef = useRef(null);
 
-  useEffect(() => {
-    if (mapLevel === "regions") {
-      setPath("/data/brazil_regions.json");
-    }
-
-    if (mapLevel === "states") {
-      setPath("/data/brazil_states.json");
-    }
-
-  }, [mapLevel]);
+  const path =
+    mapLevel === "regions"
+      ? "/data/brazil_regions.json"
+      : "/data/brazil_states.json";
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [worldRes, brazilRes] = await Promise.all([
-          fetch(
-            "/data/world.json",
-          ),
-          fetch(path),
-        ]);
+        if (!worldDataRef.current) {
+          const worldRes = await fetch("/data/world.json");
+          worldDataRef.current = await worldRes.json();
+        }
 
-        const worldData = await worldRes.json();
+        const brazilRes = await fetch(path);
         const brazilData = await brazilRes.json();
+
+        const worldData = worldDataRef.current;
 
         let brazilFeatures;
 
@@ -103,12 +96,9 @@ export default function MyGlobe({ onCoordsChange }) {
       const hit = raycaster.ray.intersectSphere(globeSphere, intersectionPoint);
 
       if (!hit) {
-        setIsOverGlobe(false);
         onCoordsChange(null);
         return;
       }
-
-      setIsOverGlobe(true);
 
       const radius = globeSphere.radius;
       const lat = Math.asin(intersectionPoint.y / radius) * (180 / Math.PI);
@@ -119,7 +109,6 @@ export default function MyGlobe({ onCoordsChange }) {
     };
 
     const handleMouseLeave = () => {
-      setIsOverGlobe(false);
       onCoordsChange(null);
     };
 
