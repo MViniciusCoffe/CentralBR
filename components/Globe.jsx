@@ -1,5 +1,5 @@
 import Globe from "react-globe.gl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { geoCentroid, geoArea } from "d3-geo";
 import * as THREE from "three";
 import { feature } from "topojson-client";
@@ -9,13 +9,18 @@ export default function MyGlobe({ onCoordsChange }) {
   const { mapLevel } = useMap();
   const globeRef = useRef();
   const [hovered, setHovered] = useState(null);
-  const [polygons, setPolygons] = useState([]);
+  const [worldFeatures, setWorldFeatures] = useState([]);
+  const [brazilFeatures, setBrazilFeatures] = useState([]);
   const worldDataRef = useRef(null);
 
   const path =
     mapLevel === "regions"
       ? "/data/brazil_regions.json"
       : "/data/brazil_states.json";
+
+  const polygons = useMemo(() => {
+    return [...worldFeatures, ...brazilFeatures];
+  }, [worldFeatures, brazilFeatures]);
 
   useEffect(() => {
     async function loadData() {
@@ -54,9 +59,8 @@ export default function MyGlobe({ onCoordsChange }) {
           (feat) => feat.properties.name !== "Brazil",
         );
 
-        const combined = [...worldWithoutBrazil, ...brazilFeatures];
-
-        setPolygons(combined);
+        setWorldFeatures(worldWithoutBrazil);
+        setBrazilFeatures(brazilFeatures);
       } catch (error) {
         console.error("Erro ao carregar os dados", error);
       }
