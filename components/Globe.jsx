@@ -12,6 +12,7 @@ export default function MyGlobe({ onCoordsChange }) {
   const [worldFeatures, setWorldFeatures] = useState([]);
   const [brazilFeatures, setBrazilFeatures] = useState([]);
   const worldDataRef = useRef(null);
+  let frame = null;
 
   const path =
     mapLevel === "regions"
@@ -91,25 +92,31 @@ export default function MyGlobe({ onCoordsChange }) {
     const intersectionPoint = new THREE.Vector3();
 
     const handleMouseMove = (event) => {
-      const rect = canvas.getBoundingClientRect();
+      if (frame) return;
 
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const hit = raycaster.ray.intersectSphere(globeSphere, intersectionPoint);
-
-      if (!hit) {
-        onCoordsChange(null);
-        return;
-      }
-
-      const radius = globeSphere.radius;
-      const lat = Math.asin(intersectionPoint.y / radius) * (180 / Math.PI);
-      const lng =
-        Math.atan2(intersectionPoint.x, intersectionPoint.z) * (180 / Math.PI);
-
-      onCoordsChange({ lat, lng });
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        
+        const rect = canvas.getBoundingClientRect();
+  
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  
+        raycaster.setFromCamera(mouse, camera);
+        const hit = raycaster.ray.intersectSphere(globeSphere, intersectionPoint);
+  
+        if (!hit) {
+          onCoordsChange(null);
+          return;
+        }
+  
+        const radius = globeSphere.radius;
+        const lat = Math.asin(intersectionPoint.y / radius) * (180 / Math.PI);
+        const lng =
+          Math.atan2(intersectionPoint.x, intersectionPoint.z) * (180 / Math.PI);
+  
+        onCoordsChange({ lat, lng });
+      })
     };
 
     const handleMouseLeave = () => {
