@@ -53,12 +53,29 @@ export default function MyGlobe({ onCoordsChange }) {
           properties: {
             ...feat.properties,
             isBrazilState: true,
+            baseColor: "rgba(255,215,0,0.4)",
+            hoverColor: "rgba(255,215,0,0.9)",
+            strokeColor: "#ffffff",
+            strokeWidth: 1.2,
+            baseAltitude: 0.01,
+            hoverAltitude: 0.03,
           },
         }));
 
-        const worldWithoutBrazil = worldData.features.filter(
-          (feat) => feat.properties.name !== "Brazil",
-        );
+        const worldWithoutBrazil = worldData.features
+          .filter((feat) => feat.properties.name !== "Brazil")
+          .map((feat) => ({
+            ...feat,
+            properties: {
+              ...feat.properties,
+              baseColor: "rgba(0,0,0,0)",
+              hoverColor: "rgba(255,255,255,0.05)",
+              strokeColor: "#555555",
+              strokeWidth: 0.3,
+              baseAltitude: 0.01,
+              hoverAltitude: 0.02,
+            },
+          }));
 
         setWorldFeatures(worldWithoutBrazil);
         setBrazilFeatures(brazilFeatures);
@@ -96,27 +113,31 @@ export default function MyGlobe({ onCoordsChange }) {
 
       frame = requestAnimationFrame(() => {
         frame = null;
-        
+
         const rect = canvas.getBoundingClientRect();
-  
+
         mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  
+
         raycaster.setFromCamera(mouse, camera);
-        const hit = raycaster.ray.intersectSphere(globeSphere, intersectionPoint);
-  
+        const hit = raycaster.ray.intersectSphere(
+          globeSphere,
+          intersectionPoint,
+        );
+
         if (!hit) {
           onCoordsChange(null);
           return;
         }
-  
+
         const radius = globeSphere.radius;
         const lat = Math.asin(intersectionPoint.y / radius) * (180 / Math.PI);
         const lng =
-          Math.atan2(intersectionPoint.x, intersectionPoint.z) * (180 / Math.PI);
-  
+          Math.atan2(intersectionPoint.x, intersectionPoint.z) *
+          (180 / Math.PI);
+
         onCoordsChange({ lat, lng });
-      })
+      });
     };
 
     const handleMouseLeave = () => {
@@ -142,35 +163,15 @@ export default function MyGlobe({ onCoordsChange }) {
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
       onPolygonHover={setHovered}
-      polygonCapColor={(d) => {
-        if (d === hovered && d.properties.isBrazilState) {
-          return "rgba(255,215,0,0.9)";
-        }
-
-        if (d.properties.isBrazilState) {
-          return "rgba(255,215,0,0.4)";
-        }
-
-        return "rgba(0,0,0,0)";
-      }}
-      polygonSideColor={() => "rgba(0,0,0,0.05)"}
-      polygonStrokeColor={(d) =>
-        d.properties.isBrazilState ? "#ffffff" : "#555555"
+      polygonCapColor={(d) =>
+        d === hovered ? d.properties.hoverColor : d.properties.baseColor
       }
-      polygonStrokeWidth={(d) => (d.properties.isBrazilState ? 1.2 : 0.3)}
-      polygonAltitude={(d) => {
-        if (!hovered) return 0.01;
-
-        if (d === hovered && d.properties.isBrazilState) {
-          return 0.03;
-        }
-
-        if (d === hovered) {
-          return 0.02;
-        }
-
-        return 0.01;
-      }}
+      polygonSideColor={() => "rgba(0,0,0,0.05)"}
+      polygonStrokeColor={(d) => d.properties.strokeColor}
+      polygonStrokeWidth={(d) => d.properties.strokeWidth}
+      polygonAltitude={(d) =>
+        d === hovered ? d.properties.hoverAltitude : d.properties.baseAltitude
+      }
       onPolygonClick={(d) => {
         if (!d) return;
 
@@ -196,6 +197,3 @@ export default function MyGlobe({ onCoordsChange }) {
     />
   );
 }
-
-// Refazer useEffect do MapLevel
-// Fazer com que o globo recarregue após mudança, para que não trave tudo
