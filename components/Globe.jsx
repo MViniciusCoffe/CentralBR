@@ -73,7 +73,7 @@ export default function MyGlobe({ onCoordsChange }) {
     if (globeRef.current) {
       globeRef.current.pointOfView({ lat: -10, lng: -55, altitude: 2 }, 2000);
     }
-  }, [polygons]);
+  }, []);
 
   useEffect(() => {
     if (!globeRef.current || typeof onCoordsChange !== "function") return;
