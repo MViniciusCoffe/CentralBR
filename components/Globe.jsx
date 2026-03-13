@@ -12,7 +12,7 @@ export default function MyGlobe({ onCoordsChange }) {
   const [worldFeatures, setWorldFeatures] = useState([]);
   const [brazilFeatures, setBrazilFeatures] = useState([]);
   const worldDataRef = useRef(null);
-  let frame = null;
+  const frameRef = useRef(null);
 
   const path =
     mapLevel === "regions"
@@ -109,10 +109,10 @@ export default function MyGlobe({ onCoordsChange }) {
     const intersectionPoint = new THREE.Vector3();
 
     const handleMouseMove = (event) => {
-      if (frame) return;
+      if (frameRef.current) return;
 
-      frame = requestAnimationFrame(() => {
-        frame = null;
+      frameRef.current = requestAnimationFrame(() => {
+        frameRef.current = null;
 
         const rect = canvas.getBoundingClientRect();
 
