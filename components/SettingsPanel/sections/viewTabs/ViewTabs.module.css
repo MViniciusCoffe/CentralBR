@@ -1,0 +1,13 @@
+.optionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.optionGroup ul {
+  list-style-type: none;
+}
+
+.optionGroup label input {
+  margin-right: 0.5rem;
+}
