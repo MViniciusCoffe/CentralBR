@@ -57,8 +57,6 @@ export default function MyGlobe({ onCoordsChange }) {
             hoverColor: "rgba(255,215,0,0.9)",
             strokeColor: "#ffffff",
             strokeWidth: 1.2,
-            baseAltitude: 0.01,
-            hoverAltitude: 0.03,
           },
         }));
 
@@ -72,8 +70,6 @@ export default function MyGlobe({ onCoordsChange }) {
               hoverColor: "rgba(255,255,255,0.05)",
               strokeColor: "#555555",
               strokeWidth: 0.3,
-              baseAltitude: 0.01,
-              hoverAltitude: 0.02,
             },
           }));
 
@@ -169,9 +165,7 @@ export default function MyGlobe({ onCoordsChange }) {
       polygonSideColor={() => "rgba(0,0,0,0.05)"}
       polygonStrokeColor={(d) => d.properties.strokeColor}
       polygonStrokeWidth={(d) => d.properties.strokeWidth}
-      polygonAltitude={(d) =>
-        d === hovered ? d.properties.hoverAltitude : d.properties.baseAltitude
-      }
+      polygonAltitude={0.01}
       onPolygonClick={(d) => {
         if (!d) return;
 
