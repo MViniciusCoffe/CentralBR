@@ -8,11 +8,19 @@ import { useMap } from "../context/MapContext";
 export default function MyGlobe({ onCoordsChange }) {
   const { mapLevel } = useMap();
   const globeRef = useRef();
-  const [hovered, setHovered] = useState(null);
-  const [worldFeatures, setWorldFeatures] = useState([]);
-  const [brazilFeatures, setBrazilFeatures] = useState([]);
+  const hoveredRef = useRef(null);
+  const prevHoveredRef = useRef(null);
   const worldDataRef = useRef(null);
   const frameRef = useRef(null);
+  const [, setRenderTrigger] = useState(0);
+  const [worldFeatures, setWorldFeatures] = useState([]);
+  const [brazilFeatures, setBrazilFeatures] = useState([]);
+
+  const getPolygonCapColor = (d) => {
+    return d === hoveredRef.current
+      ? d.properties.hoverColor
+      : d.properties.baseColor;
+  };
 
   const path =
     mapLevel === "regions"
@@ -158,10 +166,12 @@ export default function MyGlobe({ onCoordsChange }) {
       polygonsTransitionDuration={200}
       globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
       bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-      onPolygonHover={setHovered}
-      polygonCapColor={(d) =>
-        d === hovered ? d.properties.hoverColor : d.properties.baseColor
-      }
+      onPolygonHover={(d) => {
+        prevHoveredRef.current = hoveredRef.current;
+        hoveredRef.current = d;
+        setRenderTrigger((v) => v + 1);
+      }}
+      polygonCapColor={getPolygonCapColor}
       polygonSideColor={() => "rgba(0,0,0,0.05)"}
       polygonStrokeColor={(d) => d.properties.strokeColor}
       polygonStrokeWidth={(d) => d.properties.strokeWidth}
@@ -190,4 +200,14 @@ export default function MyGlobe({ onCoordsChange }) {
       }}
     />
   );
+
+  function updatePolygonColors() {
+    const globe = globeRef.current;
+    if (!globe) return;
+
+    globe.polygonCapColor((d) => {
+      if (d === hoveredRef.current) return d.properties.hoverColor;
+      return d.properties.baseColor;
+    });
+  }
 }
