@@ -200,14 +200,4 @@ export default function MyGlobe({ onCoordsChange }) {
       }}
     />
   );
-
-  function updatePolygonColors() {
-    const globe = globeRef.current;
-    if (!globe) return;
-
-    globe.polygonCapColor((d) => {
-      if (d === hoveredRef.current) return d.properties.hoverColor;
-      return d.properties.baseColor;
-    });
-  }
 }
