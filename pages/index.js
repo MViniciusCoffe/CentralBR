@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import { useState } from "react";
 import Image from "next/image";
 import SettingsPanel from "../components/SettingsPanel/SettingsPanel";
+import ZoomControl from "../components/ZoomControl";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
@@ -69,6 +70,8 @@ export default function Home() {
         open={settingsOpen}
         setOpen={setSettingsOpen}
       />
+
+      <ZoomControl />
     </div>
   );
 }
