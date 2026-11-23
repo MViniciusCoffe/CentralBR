@@ -46,7 +46,6 @@
   width: 10rem;
   height: 10rem;
   filter: brightness(1000%);
-  user-drag: none;
   -webkit-user-drag: none;
   user-select: none;
   outline: none;
