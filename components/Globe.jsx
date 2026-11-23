@@ -1,6 +1,6 @@
+import { geoArea, geoCentroid } from "d3-geo";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Globe from "react-globe.gl";
-import { useEffect, useRef, useState, useMemo } from "react";
-import { geoCentroid, geoArea } from "d3-geo";
 import * as THREE from "three";
 import { feature } from "topojson-client";
 import { useMap } from "../context/MapContext";

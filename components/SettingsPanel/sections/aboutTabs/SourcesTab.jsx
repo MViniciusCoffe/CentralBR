@@ -5,25 +5,19 @@ export default function SourcesTab() {
 
       <p>
         Este projeto utiliza dados públicos provenientes de instituições
-        oficiais e bases de dados abertas. O objetivo é garantir
-        transparência, confiabilidade e acessibilidade das informações
-        apresentadas na plataforma.
+        oficiais e bases de dados abertas. O objetivo é garantir transparência,
+        confiabilidade e acessibilidade das informações apresentadas na
+        plataforma.
       </p>
 
       <h3>Instituições</h3>
 
       <ul>
-        <li>
-          IBGE – Instituto Brasileiro de Geografia e Estatística
-        </li>
+        <li>IBGE – Instituto Brasileiro de Geografia e Estatística</li>
 
-        <li>
-          TSE – Tribunal Superior Eleitoral
-        </li>
+        <li>TSE – Tribunal Superior Eleitoral</li>
 
-        <li>
-          Dados públicos governamentais e bases abertas
-        </li>
+        <li>Dados públicos governamentais e bases abertas</li>
       </ul>
 
       <h3>Tipos de Dados Utilizados</h3>
@@ -45,10 +39,9 @@ export default function SourcesTab() {
       </ul>
 
       <p>
-        Os dados geográficos utilizados no projeto são baseados
-        principalmente nas malhas territoriais disponibilizadas pelo
-        IBGE e podem ser atualizados conforme novas versões forem
-        publicadas.
+        Os dados geográficos utilizados no projeto são baseados principalmente
+        nas malhas territoriais disponibilizadas pelo IBGE e podem ser
+        atualizados conforme novas versões forem publicadas.
       </p>
     </>
   );

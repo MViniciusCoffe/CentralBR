@@ -11,10 +11,16 @@ export default function ViewSection() {
     <>
       <div className={styles.lateralMenu}>
         <ul>
-          <li onClick={() => setTab("map")} className={tab === "map" ? styles.selected : ""}>
+          <li
+            onClick={() => setTab("map")}
+            className={tab === "map" ? styles.selected : ""}
+          >
             <p>Mapa</p>
           </li>
-          <li onClick={() => setTab("style")} className={tab === "style" ? styles.selected : ""}>
+          <li
+            onClick={() => setTab("style")}
+            className={tab === "style" ? styles.selected : ""}
+          >
             <p>Estilo</p>
           </li>
         </ul>

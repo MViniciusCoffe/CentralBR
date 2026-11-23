@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
-import styles from "../styles/Home.module.css";
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import SettingsPanel from "../components/SettingsPanel/SettingsPanel";
 import ZoomControl from "../components/ZoomControl";
+import styles from "../styles/Home.module.css";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
@@ -66,10 +66,7 @@ export default function Home() {
         </div>
       </footer>
 
-      <SettingsPanel 
-        open={settingsOpen}
-        setOpen={setSettingsOpen}
-      />
+      <SettingsPanel open={settingsOpen} setOpen={setSettingsOpen} />
 
       <ZoomControl />
     </div>

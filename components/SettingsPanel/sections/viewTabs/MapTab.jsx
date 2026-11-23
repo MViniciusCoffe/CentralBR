@@ -2,7 +2,7 @@ import { useMap } from "../../../../context/MapContext";
 import styles from "./ViewTabs.module.css";
 
 export default function MapTab() {
-  const {mapLevel, setMapLevel} = useMap();
+  const { mapLevel, setMapLevel } = useMap();
 
   return (
     <>

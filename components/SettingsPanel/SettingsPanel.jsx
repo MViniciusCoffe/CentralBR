@@ -1,6 +1,6 @@
-import styles from "./Panel.module.css";
 import Image from "next/image";
 import { useState } from "react";
+import styles from "./Panel.module.css";
 
 import AboutSection from "./sections/AboutSection";
 import ViewSection from "./sections/ViewSection";
@@ -40,10 +40,7 @@ export default function SettingsPanel({ open, setOpen }) {
             />
             <p>Vista</p>
           </li>
-          <li
-            className={`${styles.menuIcon}`}
-            onClick={() => setOpen(false)}
-          >
+          <li className={`${styles.menuIcon}`} onClick={() => setOpen(false)}>
             <Image
               src="/img/exit-icon.png"
               alt="Fechar"

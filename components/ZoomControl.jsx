@@ -6,5 +6,5 @@ export default function ZoomControl() {
       <button>+</button>
       <button>-</button>
     </div>
-  )
+  );
 }
