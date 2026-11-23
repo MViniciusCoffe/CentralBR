@@ -176,6 +176,9 @@ export default function MyGlobe({ onCoordsChange }) {
       polygonStrokeColor={(d) => d.properties.strokeColor}
       polygonStrokeWidth={(d) => d.properties.strokeWidth}
       polygonAltitude={0.01}
+      // 10° em vez do padrão 5°: corta ~60% do custo de montar os polígonos.
+      // Acima disso a tampa vira plana e afunda no globo em estados grandes.
+      polygonCapCurvatureResolution={10}
       onPolygonClick={(d) => {
         if (!d) return;
 
