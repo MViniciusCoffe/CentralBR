@@ -164,8 +164,8 @@ export default function MyGlobe({ onCoordsChange }) {
       autoRotateSpeed={0.5}
       polygonsData={polygons}
       polygonsTransitionDuration={200}
-      globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-      bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+      globeImageUrl="/img/earth-blue-marble.jpg"
+      bumpImageUrl="/img/earth-topology.png"
       onPolygonHover={(d) => {
         prevHoveredRef.current = hoveredRef.current;
         hoveredRef.current = d;
