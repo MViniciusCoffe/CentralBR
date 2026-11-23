@@ -7,7 +7,23 @@ import styles from "../styles/Home.module.css";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
-  loading: () => <div className={styles.mainLoader}>Carregando mapa...</div>,
+  // Em caso de falha no import, o next/dynamic continua renderizando este
+  // componente com `error` preenchido — sem tratar, vira loading infinito.
+  loading: ({ error, retry }) => {
+    if (error) {
+      console.error("Falha ao carregar o globo", error);
+      return (
+        <div className={styles.mainLoader}>
+          <p>Não foi possível carregar o mapa.</p>
+          <pre>{error.message}</pre>
+          <button type="button" onClick={retry}>
+            Tentar novamente
+          </button>
+        </div>
+      );
+    }
+    return <div className={styles.mainLoader}>Carregando mapa...</div>;
+  },
 });
 
 export default function Home() {
