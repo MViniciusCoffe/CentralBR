@@ -5,6 +5,13 @@ import ProjectTab from "./aboutTabs/ProjectTab";
 import SourcesTab from "./aboutTabs/SourcesTab";
 import styles from "./Sections.module.css";
 
+const TABS = [
+  { id: "project", label: "Projeto" },
+  { id: "author", label: "Autor" },
+  { id: "controls", label: "Controles" },
+  { id: "sources", label: "Fontes" },
+];
+
 export default function AboutSection() {
   const [tab, setTab] = useState("project");
 
@@ -12,30 +19,18 @@ export default function AboutSection() {
     <>
       <div className={styles.lateralMenu}>
         <ul>
-          <li
-            onClick={() => setTab("project")}
-            className={tab === "project" ? styles.selected : ""}
-          >
-            <p>Projeto</p>
-          </li>
-          <li
-            onClick={() => setTab("author")}
-            className={tab === "author" ? styles.selected : ""}
-          >
-            <p>Autor</p>
-          </li>
-          <li
-            onClick={() => setTab("controls")}
-            className={tab === "controls" ? styles.selected : ""}
-          >
-            <p>Controles</p>
-          </li>
-          <li
-            onClick={() => setTab("sources")}
-            className={tab === "sources" ? styles.selected : ""}
-          >
-            <p>Fontes</p>
-          </li>
+          {TABS.map(({ id, label }) => (
+            <li key={id} className={tab === id ? styles.selected : ""}>
+              <button
+                type="button"
+                className={styles.tabButton}
+                aria-pressed={tab === id}
+                onClick={() => setTab(id)}
+              >
+                {label}
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
       <div className={styles.menuContent}>

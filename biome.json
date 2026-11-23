@@ -23,13 +23,13 @@
     "rules": {
       "preset": "recommended",
       "suspicious": {
-        "noConsole": "warn"
+        "noConsole": {
+          "level": "warn",
+          "options": { "allow": ["error", "warn"] }
+        }
       },
       "correctness": {
         "useExhaustiveDependencies": "warn"
-      },
-      "a11y": {
-        "useKeyWithClickEvents": "warn"
       }
     }
   },

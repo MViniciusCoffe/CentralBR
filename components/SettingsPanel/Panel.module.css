@@ -29,13 +29,14 @@
 
 .topMenu ul {
   display: flex;
+  list-style: none;
 }
 
 .topMenu li {
   height: 5rem;
   width: 5rem;
   border-right: 1px solid #333366;
-  cursor: pointer;
+  background-color: #000011e0;
   transition: all 0.3s ease-in-out;
 }
 
@@ -53,7 +54,7 @@
   border-right: none;
 }
 
-.topMenu li p {
+.topMenu li span {
   font-size: 0.75rem;
 }
 
@@ -61,11 +62,9 @@
   background-color: #fe3d38;
 }
 
-.topMenu li:last-child:hover .exitIcon {
-  filter: brightness(1000%);
-}
-
 .menuIcon {
+  all: unset;
+  box-sizing: border-box;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -73,12 +72,14 @@
   gap: 0.5rem;
   padding: 0.5rem;
   padding-bottom: 1rem;
-  width: 4rem;
-  height: 4rem;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
-  border-bottom: 0;
-  background-color: #000011e0;
-  transition: all 0.3s ease-in-out;
+}
+
+.menuIcon:focus-visible {
+  outline: 2px solid #3498db;
+  outline-offset: -2px;
 }
 
 .icon {
@@ -98,6 +99,10 @@
   transition: all 0.3s ease-in-out;
   transform: scale(1.3);
   filter: none;
+}
+
+.topMenu li:last-child:hover .exitIcon {
+  filter: brightness(1000%);
 }
 
 .bottomMenu {
