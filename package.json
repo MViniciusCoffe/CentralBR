@@ -20,7 +20,8 @@
     "format:check": "biome format .",
     "format:fix": "biome format --write .",
     "check": "biome check .",
-    "check:fix": "biome check --write ."
+    "check:fix": "biome check --write .",
+    "data:simplify": "bash scripts/simplify-data.sh"
   },
   "dependencies": {
     "d3-geo": "^3.1.1",
@@ -33,6 +34,7 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.6"
+    "@biomejs/biome": "2.6.6",
+    "mapshaper": "0.7.101"
   }
 }
