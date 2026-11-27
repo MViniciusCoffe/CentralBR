@@ -1,3 +1,5 @@
+"use client";
+
 import { geoArea, geoCentroid } from "d3-geo";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Globe from "react-globe.gl";

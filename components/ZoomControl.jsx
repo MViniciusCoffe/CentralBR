@@ -1,6 +1,8 @@
+"use client";
+
 import styles from "./ZoomControl.module.css";
 
-export default function ZoomControl() {
+export function ZoomControl() {
   return (
     <div className={styles.zoomControl}>
       <button type="button">+</button>

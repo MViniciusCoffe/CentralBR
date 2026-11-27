@@ -1,14 +1,14 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
-import SettingsPanel from "../components/SettingsPanel/SettingsPanel";
-import ZoomControl from "../components/ZoomControl";
+import { SettingsPanel } from "../components/SettingsPanel/SettingsPanel";
+import { ZoomControl } from "../components/ZoomControl";
 import styles from "../styles/Home.module.css";
 
 const Globe = dynamic(() => import("../components/Globe"), {
   ssr: false,
-  // Em caso de falha no import, o next/dynamic continua renderizando este
-  // componente com `error` preenchido — sem tratar, vira loading infinito.
   loading: ({ error, retry }) => {
     if (error) {
       console.error("Falha ao carregar o globo", error);
@@ -32,13 +32,10 @@ export default function Home() {
 
   function formatCoordToDegree(value, isLat) {
     const abs = Math.abs(value);
-
     const degrees = Math.floor(abs);
     const minutesFloat = (abs - degrees) * 60;
     const minutes = Math.floor(minutesFloat);
-
     const seconds = Math.floor((minutesFloat - minutes) * 60);
-
     const direction = isLat ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
 
     return `${degrees}° ${minutes}' ${seconds}" ${direction}`;

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useState } from "react";
 import styles from "./Panel.module.css";
@@ -5,7 +7,7 @@ import styles from "./Panel.module.css";
 import AboutSection from "./sections/AboutSection";
 import ViewSection from "./sections/ViewSection";
 
-export default function SettingsPanel({ open, setOpen }) {
+export function SettingsPanel({ open, setOpen }) {
   const [section, setSection] = useState("about");
 
   return (

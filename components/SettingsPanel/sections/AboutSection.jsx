@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import AuthorTab from "./aboutTabs/AuthorTab";
 import ControlsTab from "./aboutTabs/ControlsTab";

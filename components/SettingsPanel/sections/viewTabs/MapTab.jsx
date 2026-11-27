@@ -1,3 +1,5 @@
+"use client";
+
 import { useMap } from "../../../../context/MapContext";
 import styles from "./ViewTabs.module.css";
 
